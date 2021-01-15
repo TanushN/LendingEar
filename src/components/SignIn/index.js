@@ -66,14 +66,12 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleButtonChange = () => {
-
-    console.log("Email: " + email);
-    console.log("Password: " + password);
-
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then((user) => {})
+      .then((user) => {
+        console.log(user);
+      })
       .catch((error) => {
         var errorCode = error.code;
 

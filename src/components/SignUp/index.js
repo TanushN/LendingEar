@@ -19,6 +19,7 @@ import Alert from "@material-ui/lab/Alert";
 
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 function Copyright() {
   return (
@@ -57,6 +58,7 @@ export default function SignUp() {
   const classes = useStyles();
 
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [snackBarOpen, setSnackBarOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -66,7 +68,18 @@ export default function SignUp() {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((user) => {
-        console.log("user created");
+        firebase.firestore().collection("users")
+          .doc(user.uid)
+          .set({
+            email: email,
+            userName: userName,
+          })
+          .then(function() {
+            console.log("Document successfully written!");
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error);
+          });
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -114,6 +127,18 @@ export default function SignUp() {
                 name="email"
                 autoComplete="email"
                 onChange={(e) => setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+            <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="username"
+                label="User Name"
+                name="username"
+                autoComplete="username"
+                onChange={(e) => setUserName(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>

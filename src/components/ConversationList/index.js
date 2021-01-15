@@ -12,7 +12,13 @@ import './ConversationList.css';
 import firebase from "firebase/app";
 import "firebase/auth";
 
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 export default function ConversationList(props) {
+
+  const [user] = useAuthState(firebase.auth());
+
+
   const [conversations, setConversations] = useState([]);
   useEffect(() => {
     getConversations()
@@ -33,7 +39,7 @@ export default function ConversationList(props) {
 
   const signOut = () => {
 
-    console.log("triggered");
+    console.log(user.uid);
 
     firebase.auth().signOut().then(() => {
       // Sign-out successful.
